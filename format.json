@@ -1,0 +1,76 @@
+{
+  "ARDID": "0001",
+  "sensors": [
+    {
+      "name": "gps",
+      "time": 123123,
+      "data": [
+        1.123456,
+        2.123456
+      ]
+    },
+    {
+      "name": "temp",
+      "time": 123123,
+      "data": [
+        23.2
+      ]
+    },
+    {
+      "name": "pressure",
+      "time": 123123,
+      "data": [
+        900000
+      ]
+    },
+    {
+      "name": "humidity",
+      "time": 123123,
+      "data": [
+        30
+      ]
+    },
+    {
+      "name": "sensor05",
+      "time": 0,
+      "data": [
+        0
+      ]
+    },
+    {
+      "name": "sensor06",
+      "time": 0,
+      "data": [
+        0
+      ]
+    },
+    {
+      "name": "sensor07",
+      "time": 0,
+      "data": [
+        0
+      ]
+    },
+    {
+      "name": "sensor08",
+      "time": 0,
+      "data": [
+        0
+      ]
+    },
+    {
+      "name": "sensor09",
+      "time": 0,
+      "data": [
+        0
+      ]
+    },
+    {
+      "name": "sensor10",
+      "time": 0,
+      "data": [
+        0
+      ]
+    }
+  ]
+}

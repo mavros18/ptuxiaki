@@ -1,0 +1,86 @@
+void print_sensor_data() {
+  digitalWrite(STAT_GREEN, HIGH);
+
+  Serial.print(millis());
+  Serial.print(F(": "));
+
+  for (int sen = 0; sen < sizeof(sensorValue) / sizeof(float); sen++) {
+    strcpy_P(senNameBuffer, (char*)pgm_read_word(&(sensorNamePointers[sen])));
+    Serial << senNameBuffer << "=" << sensorValue[sen] << " ";
+  }
+  Serial.println();
+
+
+  //LM35
+  //  Serial.print(" Temp_LM35 = ");
+  //  Serial.print(sensor[6]);
+  //  Serial.print("C");
+
+  digitalWrite(STAT_GREEN, LOW);
+}
+
+void createJson() {
+  //
+  // Reserve memory space
+  //
+  
+  StaticJsonBuffer<jsonLen> jsonBuffer;
+
+  JsonObject& root = jsonBuffer.createObject();
+  root["ARDID"] = ARDUINO_ID;
+
+  JsonArray& sensors_array = root.createNestedArray("sensors");
+
+  for (int sen = 0; sen < sizeof(sensorValue) / sizeof(float) - 1; sen++) {
+    JsonObject& sensor = sensors_array.createNestedObject();
+    //    sensor["name"] = sensorName[sen];
+    sensor["time"] = millis();
+    JsonArray& data_array = sensor.createNestedArray("data");
+    data_array.add(sensorValue[sen], 6);
+  }
+
+  //
+  // Step 3: Generate the JSON string
+  //
+//  int len = root.measureLength();
+//  Serial << F("OutLen: ") << len << endl;
+  root.prettyPrintTo(json);
+}
+
+void readJson(){
+  //
+  // Reserve memory space
+  //
+  StaticJsonBuffer<jsonLen> jsonBuffer;
+
+  //
+  // Deserialize the JSON string
+  //
+  JsonObject& root = jsonBuffer.parseObject(json);
+
+  if (!root.success())
+  {
+    Serial.println(F("Error: ParseObject() failed"));
+    return;
+  }
+
+  //
+  // Retrieve the values
+  //
+  const char* id = root["ARDID"];
+  const char* sensor = root["sensors"]["name"];
+  long        timeJ = root["sensors"]["time"];
+  double      lat = root["sensors"]["data"][0];
+  double      lon = root["sensors"]["data"][1];
+
+  Serial << F("ARDID: ") << id << endl;
+//  Serial.println(sensor);
+  Serial << F("Sensor: ") << sensor << endl;
+//  Serial.println(timeJ);
+  Serial << F("Time: ") << timeJ << endl;
+//  Serial.println(latitude);
+  Serial << F("Lat: ") <<  _FLOAT(lat,6) << endl;
+//  Serial.println(longitude);
+  Serial << F("Lon: ") << _FLOAT(lon,6) << endl;
+  Serial.println();
+}
